@@ -1,0 +1,34 @@
+{
+    "name": "meneguetti/viscle",
+    "type": "library",
+    "description": "Viscle provides a visual lifecycle for PHP request.",
+    "keywords": ["viscle", "visual lilfecycle", "lifecycle", "life cycle"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vitor Meneguetti"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "ext-xdebug": "^2.7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8.35 || ^5.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Viscle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viscle\\Test\\": "test/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
