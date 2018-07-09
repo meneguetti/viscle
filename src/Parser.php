@@ -155,7 +155,7 @@ class Parser
             }
             //else marks this node has children
             else {
-                $childrenControl[$item['name']]['has_children'] = true;
+                $childrenControl[$item['name'] ?? '']['has_children'] = true;
                 $lifecycleDecoded[$index]['children'] = $this->filter($item['children']);
             }
         }

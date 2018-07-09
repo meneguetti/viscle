@@ -1,13 +1,38 @@
-## <p align="left">Viscle (Visual Lifecycle)</p>
+## <p align="left">Viscle</p>
 
-Viscle provides a visual lifecycle for PHP request.
+Viscle (Visual Lifecycle) provides a visual lifecycle for PHP request.
 
 
 ## Installation
 
 ```sh
-composer require meneguetti/viscle:dev-master
+composer require meneguetti/viscle
 ```
+
+## Usage
+1. Include the following code where you want to start capturing the request lifecycle, it has to be somewhere after requiring 'vendor/autoload.php'.
+```php
+\Viscle\Viscle::capture(); 
+```
+2. Include the following code where you want to stop capturing and rendering the visual lifecycle.
+```php
+echo Viscle\Viscle::render();
+```
+
+## Examples
+* Example 1 - Simple usage of a set of classes within test/example:
+
+```php
+\Viscle\Viscle::capture();
+
+$a = new VisualLifecycle\A;
+$a->perform();
+
+echo Viscle\Viscle::render();
+```
+It will render like following:
+
+![Example 1](/test/example/image/1.png)
 
 ## Requirements
 

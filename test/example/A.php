@@ -15,7 +15,7 @@ class A
         $b = new B();
         $e = new E();
         
-        return 'sadf';
+        return true;
     }
 
 }
