@@ -3,6 +3,12 @@
 Viscle provides a visual lifecycle for PHP request.
 
 
+## Installation
+
+```sh
+composer require meneguetti/viscle:dev-master
+```
+
 ## Requirements
 
 PHP >= 7.1
