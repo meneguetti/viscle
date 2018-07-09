@@ -23,14 +23,14 @@ class Viscle
     {
         //prepare raw json to render the graph with nodes
         $lifecycle = self::parseToJson($filename);
-
+        
         //filter the raw object to let the graph cleaner
         $lifecycle = json_encode(array_values(self::filter($lifecycle)));
 
         return $lifecycle;
     }
 
-    public static function parseToJson(string $filename)
+    protected static function parseToJson(string $filename)
     {
 
         $rows = file($filename);
@@ -84,6 +84,7 @@ class Viscle
             array_push($nodesStack, $node);
         }
 
+        //if the number of opened and closed objects/functions doesn't exact match
         if (count($nodesStack) > 1) {
             $nodesStack = self::fixUnclosedNodes($nodesStack);
         }
@@ -134,7 +135,7 @@ class Viscle
     protected static function filter(array $lifecycleDecoded)
     {
         $childrenControl = [];
-        
+
         //verify which children should be removed from nodes
         foreach ($lifecycleDecoded as $index => $item) {
 
