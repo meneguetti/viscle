@@ -1,6 +1,6 @@
 <?php
 
-namespace VisualLifecycle;
+namespace Viscle\Example;
 
 class B
 {

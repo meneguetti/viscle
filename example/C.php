@@ -1,8 +1,8 @@
 <?php
 
-namespace VisualLifecycle;
+namespace Viscle\Example;
 
-class D
+class C
 {
 
     public function __construct()

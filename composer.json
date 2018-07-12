@@ -6,7 +6,8 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Vitor Meneguetti"
+            "name": "Vitor Meneguetti",
+            "email": "vitor.meneguetti@gmail.com"
         }
     ],
     "require": {
@@ -17,7 +18,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Viscle\\": "src/"
+            "Viscle\\": "src/",
+            "Viscle\\Example\\": "example/"
         }
     },
     "autoload-dev": {

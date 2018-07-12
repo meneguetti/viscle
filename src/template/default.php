@@ -18,7 +18,8 @@
             }
 
             .node text {
-                font: 12px sans-serif;
+                font: 14px sans-serif;
+                fill: #333;
             }
 
             path.link {
@@ -27,8 +28,8 @@
                 stroke-width: 1.5px;
             }
             .link text {
-                font: 10px sans-serif;
-                fill: #ff0000;
+                font: 12px sans-serif;
+                fill: #e74c3c;
             }
         </style>
 
@@ -42,11 +43,14 @@
         <script>
 
             var treeData = <?php echo $data ?>;
+            
+            var chartWidth = 1800;
+            var chartHeight = 750;
 
             // ************** Generate the tree diagram	 *****************
-            var margin = {top: 20, right: 120, bottom: 20, left: 120},
-                    width = 10000 - margin.right - margin.left,
-                    height = 500 - margin.top - margin.bottom;
+            var margin = {top: 20, right: 20, bottom: 20, left: 20},
+                    width = chartWidth - margin.right - margin.left,
+                    height = chartHeight - margin.top - margin.bottom;
 
             var i = 0,
                     duration = 750,
@@ -72,7 +76,7 @@
 
             update(root);
 
-            d3.select(self.frameElement).style("height", "500px");
+            d3.select(self.frameElement).style("height", chartHeight + "px");
 
             function update(source) {
 
@@ -82,7 +86,7 @@
 
                 // Normalize for fixed-depth.
                 nodes.forEach(function (d) {
-                    d.y = d.depth * 180;
+                    d.y = d.depth * 200;
                 });
 
                 // Update the nodes…
@@ -107,9 +111,9 @@
 
                 nodeEnter.append("text")
                         .attr("x", function (d) {
-                            return d.children || d._children ? -13 : 13;
+                            return d.children || d._children ? 4 * d.name.length - 30 : -3 * d.name.length + 10;
                         })
-                        .attr("dy", ".35em")
+                        .attr("dy", "1.8em")
                         .attr("text-anchor", function (d) {
                             return d.children || d._children ? "end" : "start";
                         })
@@ -188,7 +192,7 @@
                         .insert("g")
                         .attr("class", "link")
                         .append("text")
-                        .attr("dy", ".35em")
+                        .attr("dy", ".8em")
                         .attr("text-anchor", "middle")
                         .text(function (d) {
                             if(linktextControl['id' + d.source.id + d.source.link] === undefined){
@@ -200,7 +204,6 @@
                         });
 
                 // Transition link text to their new positions
-
                 linktext.transition()
                         .duration(duration)
                         .attr("transform", function (d) {

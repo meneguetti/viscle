@@ -1,20 +1,16 @@
 <?php
 
-namespace VisualLifecycle;
+namespace Viscle\Example;
 
-class A
+class D
 {
 
     public function __construct()
     {
-        
     }
-
+    
     public function perform()
     {
-        $b = new B();
-        $e = new E();
-        
         return true;
     }
 
