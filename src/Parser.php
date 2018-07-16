@@ -9,6 +9,7 @@ namespace Viscle;
  */
 class Parser
 {
+
     //columns of "xt" file (xdebug trace)
     public const OBJECT_ID_COL = 0;
     public const FUNCTION_ID_COL = 1;
@@ -62,15 +63,27 @@ class Parser
             //STATUS OPENED => it means new node
             if ($rowExploded[self::STATUS_COL] == self::STATUS_OPENED) {
 
+                $node = [];
+                
                 $linkName = '';
                 $objMethodExploded = explode('->', $rowExploded[self::NAME_COL]);
+                //check if it is an object method 
                 //define the function name to be shown in link between nodes
                 if (count($objMethodExploded) === 2) {
                     $rowExploded[self::NAME_COL] = $objMethodExploded[0];
                     $linkName = $objMethodExploded[1];
+                } 
+                //check if it is an object (static) method 
+                else {
+                    $objMethodExploded = explode('::', $rowExploded[self::NAME_COL]);
+                    //define the function name to be shown in link between nodes
+                    if (count($objMethodExploded) === 2) {
+                        $rowExploded[self::NAME_COL] = $objMethodExploded[0];
+                        $linkName = $objMethodExploded[1];
+                        $node['static'] = true;
+                    }
                 }
 
-                $node = [];
                 $node['name'] = $rowExploded[self::NAME_COL];
                 $node['link'] = $linkName;
                 $node['children'] = [];

@@ -35,25 +35,60 @@ It will render like following:
 ![Example 1](/example/image/1.png)
 
 
-* Example 2 - Usage in a framework like Laravel:
+* Example 2 - Usage in a framework (Laravel):
 
 ```php
 //inside public/index.php
 require __DIR__.'/../vendor/autoload.php';
 
 $filter = new \Viscle\Filter\NamespaceWhitelist();
-$filter->classes = ['App']; //We don't want our graph too long, right?! ;)
+//We don't want our graph too long, right?! ;)
+$filter->classes = [
+    'App',
+    'Viscle\Example' //it's just to include Viscle example in our graph
+];
 
 \Viscle\Viscle::capture($filter); 
 
 ...
 
 //inside your controller/action or route closure
+
+//just an example to show in graph
+$a = new \Viscle\Example\A;
+$a->perform();
+
 echo \Viscle\Viscle::render();
 ```
 It will render like following:
 
 ![Example 2](/example/image/2.png)
+
+
+* Example 3 - Usage in a framework (Zend Framework 3):
+
+```php
+//inside public/index.php
+include __DIR__ . '/../vendor/autoload.php';
+
+$filter = new \Viscle\Filter\NamespaceWhitelist();
+$filter->classes = ['Application', 'Album', 'Viscle\Example'];
+
+\Viscle\Viscle::capture($filter); 
+
+...
+
+//inside your controller/action
+
+//just an example to show in graph
+$a = new \Viscle\Example\A;
+$a->perform();
+
+echo \Viscle\Viscle::render();
+```
+It will render like following:
+
+![Example 3](/example/image/3.png)
 
 ## Requirements
 

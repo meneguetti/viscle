@@ -27,9 +27,13 @@
                 stroke: #ccc;
                 stroke-width: 1.5px;
             }
-            .link text {
-                font: 12px sans-serif;
+            .link{
+                font: 10px sans-serif;
                 fill: #e74c3c;
+            }
+            .static{
+                font-style: italic;
+                fill: #f0ad4e;
             }
         </style>
 
@@ -43,9 +47,53 @@
         <script>
 
             var treeData = <?php echo $data ?>;
+
+            var viscle = {};
+            var nodesPerLevel = [];
+
+            viscle.depth = function (object, currentLevel = 0) {
+                var level = 0;
+
+                if (object['children'] !== undefined || object.length !== undefined) {
+                    var depth;
+                    if (object['children'] !== undefined) {
+                        depth = viscle.depth(object['children'], ++currentLevel);
+                    } else {
+
+                        if (object.length > 0) {
+                            if (nodesPerLevel[currentLevel] === undefined) {
+                                nodesPerLevel[currentLevel] = object.length;
+                            } else {
+                                nodesPerLevel[currentLevel] += object.length;
+                            }
+                        }
+
+                        var maxDepth = 0;
+                        for (var i = 0; i < object.length; i++) {
+                            depth = viscle.depth(object[i], currentLevel) + 1;
+
+                            if (depth > maxDepth) {
+                                maxDepth = depth;
+                            }
+
+                        }
+                        depth = maxDepth;
+                    }
+                    level = Math.max(depth, level);
+                }
+                return level;
+            }
+
+            var treeDepth = viscle.depth(treeData);
+            var maxNodesPerLevel = Math.max.apply(Math, nodesPerLevel);
+            maxNodesPerLevel = maxNodesPerLevel < 4 ? 4 : maxNodesPerLevel;
+            var ratio = maxNodesPerLevel / treeDepth;
             
-            var chartWidth = 1800;
-            var chartHeight = 750;
+            ratio = ratio < 1 ? 1 : ratio;
+
+            var dxStep = 200;
+            var chartWidth = treeDepth * ratio * dxStep;
+            var chartHeight = maxNodesPerLevel * (ratio === 1 ? 1.5 : ratio) * 80;
 
             // ************** Generate the tree diagram	 *****************
             var margin = {top: 20, right: 20, bottom: 20, left: 20},
@@ -86,7 +134,7 @@
 
                 // Normalize for fixed-depth.
                 nodes.forEach(function (d) {
-                    d.y = d.depth * 200;
+                    d.y = d.depth * ratio * dxStep;
                 });
 
                 // Update the nodes…
@@ -111,16 +159,33 @@
 
                 nodeEnter.append("text")
                         .attr("x", function (d) {
-                            return d.children || d._children ? 4 * d.name.length - 30 : -3 * d.name.length + 10;
+                            return 0;
                         })
-                        .attr("dy", "1.8em")
+                        .attr("dy", "1.55em")
                         .attr("text-anchor", function (d) {
-                            return d.children || d._children ? "end" : "start";
+                            return "middle";
                         })
                         .text(function (d) {
                             return d.name;
                         })
-                        .style("fill-opacity", 1e-6);
+                        .style("fill-opacity", 1e-6)
+                        //link (method/function) text
+                        .append("tspan")
+                        .attr("class", function (d) {
+                            return d.static !== undefined ? "link static" : "link";
+                        })
+                        .attr("x", function (d) {
+                            return 0;
+                        })
+                        .attr("dy", function (d) {
+                            return d.name !== '' ? "1em" : "2em";
+                        })
+                        .attr("text-anchor", function (d) {
+                            return "middle";
+                        })
+                        .text(function (d) {
+                            return d.link;
+                        });
 
                 // Transition nodes to their new position.
                 var nodeUpdate = node.transition()
@@ -178,40 +243,6 @@
                             var o = {x: source.x, y: source.y};
                             return diagonal({source: o, target: o});
                         })
-                        .remove();
-
-                // Update the link text
-                var linktext = svg.selectAll("g.link")
-                        .data(links, function (d) {
-                            return d.target.id;
-                        });
-                        
-                var linktextControl = [];
-                        
-                linktext.enter()
-                        .insert("g")
-                        .attr("class", "link")
-                        .append("text")
-                        .attr("dy", ".8em")
-                        .attr("text-anchor", "middle")
-                        .text(function (d) {
-                            if(linktextControl['id' + d.source.id + d.source.link] === undefined){
-                                linktextControl['id' + d.source.id + d.source.link] = true;
-                                return d.source.link;
-                            }
-                            
-                            return '||';
-                        });
-
-                // Transition link text to their new positions
-                linktext.transition()
-                        .duration(duration)
-                        .attr("transform", function (d) {
-                            return "translate(" + ((d.source.y + d.target.y) / 2) + "," + ((d.source.x + d.target.x) / 2) + ")";
-                        });
-
-                //Transition exiting link text to the parent's new position.
-                linktext.exit().transition()
                         .remove();
 
                 // Stash the old positions for transition.

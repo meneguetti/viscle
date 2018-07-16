@@ -21,7 +21,8 @@ class Standard implements FilterInterface
         'Illuminate\\',
         'Reflection',
         'Symfony\\',
-        'Swift'
+        'Swift',
+        'Zend\\',
     ];
 
     public function set()
